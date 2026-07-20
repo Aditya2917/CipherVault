@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard | CipherVault
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <h1>🔐 CipherVault</h1>
+
+    <p class="subtitle">
+        Secure Multi-Algorithm Encryption Platform
+    </p>
+
+    <form method="POST">
+
+        <label>Plain Text</label>
+
+        <textarea
+    name="plaintext"
+    placeholder="Type or paste your text here..."
+>{{ plaintext }}</textarea>
+
+        <br><br>
+
+        <label>Select Algorithm</label>
+
+        <div class="algorithm">
+
+            <label>
+                <input type="radio" name="algorithm" value="AES" checked>
+                AES
+            </label>
+
+            <label>
+                <input type="radio" name="algorithm" value="DES">
+                DES
+            </label>
+
+            <label>
+                <input type="radio" name="algorithm" value="RSA">
+                RSA
+            </label>
+
+        </div>
+
+        <br>
+
+        <label>Secret Key</label>
+
+        <input
+    type="text"
+    name="secret_key"
+    placeholder="Enter Secret Key"
+    value="{{ secret_key }}"
+>
+
+        <br><br>
+
+        <button type="submit" name="action" value="encrypt">
+    🔒 Encrypt
+</button>
+
+<button type="submit" name="action" value="decrypt">
+    🔓 Decrypt
+</button>
+
+    </form>
+
+</div>
+<hr>
+
+<h2>🔐 Encryption Result</h2>
+
+<div class="info-card">
+
+    <p><strong>Algorithm:</strong> AES-CBC</p>
+
+    <p><strong>Status:</strong> Secure Encryption Successful ✅</p>
+
+</div>
+
+<h2>Cipher Text</h2>
+<textarea id="cipherText" readonly rows="8">{{ encrypted_text }}</textarea>
+
+<br><br>
+
+<button type="button" onclick="copyCipherText()">
+    📋 Copy
+</button>
+<button type="button" onclick="clearFields()">
+    🗑 Clear
+</button>
+{% endblock %}
