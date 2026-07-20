@@ -1,4 +1,5 @@
 from crypto.aes import encrypt_aes, decrypt_aes
+from crypto.des import encrypt_des, decrypt_des
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
@@ -14,14 +15,23 @@ def home():
         plaintext = request.form["plaintext"]
         secret_key = request.form["secret_key"]
         action = request.form["action"]
+        algorithm = request.form["algorithm"]
 
     try:
-        if len(secret_key) not in [16, 24, 32]:
-            raise ValueError("AES key must be 16, 24, or 32 characters long.")
-        if action == "encrypt":
-            encrypted_text = encrypt_aes(plaintext, secret_key)
-        elif action == "decrypt":
-            encrypted_text = decrypt_aes(plaintext, secret_key)
+        if algorithm == "AES":
+            if len(secret_key) not in [16, 24, 32]:
+                raise ValueError("AES key must be 16, 24, or 32 characters long.")
+            if action == "encrypt":
+                encrypted_text = encrypt_aes(plaintext, secret_key)
+            else:
+                encrypted_text = decrypt_aes(plaintext, secret_key)
+        elif algorithm == "DES":
+            if len(secret_key) != 8:
+                raise ValueError("DES key must be exactly 8 characters long.")
+            if action == "encrypt":
+                encrypted_text = encrypt_des(plaintext, secret_key)
+            else:
+                encrypted_text = decrypt_des(plaintext, secret_key)
     except Exception as e:
         encrypted_text = str(e)
 
