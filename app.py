@@ -1,3 +1,4 @@
+import os
 from flask import (
     Flask,
     render_template,
@@ -16,7 +17,10 @@ from crypto.rsa import (
 )
 
 app = Flask(__name__)
-app.secret_key = "CipherVaultSecret123"
+app.secret_key = os.environ.get(
+    "SECRET_KEY",
+    "ciphervault_secret_key"
+)
 
 
 @app.route("/", methods=["GET", "POST"])
