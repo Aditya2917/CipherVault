@@ -1,0 +1,383 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | CipherVault{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="dashboard-container">
+
+        <!-- ==========================
+             LEFT SIDEBAR
+        =========================== -->
+
+        <aside class="sidebar">
+
+            <div class="sidebar-title">
+                <h2>Algorithms</h2>
+                <p>Select Encryption</p>
+            </div>
+
+            <div class="algorithm-grid">
+
+                <div class="algorithm-card {% if algorithm=='AES' %}active-card{% endif %}"
+                     data-algorithm="AES">
+
+                    <div class="algo-icon">🔒</div>
+
+                    <h3>AES</h3>
+
+                    <p>Advanced Encryption Standard</p>
+
+                    <span class="algo-tag">
+                        Recommended
+                    </span>
+
+                </div>
+
+                <div class="algorithm-card {% if algorithm=='DES' %}active-card{% endif %}"
+                     data-algorithm="DES">
+
+                    <div class="algo-icon">🔑</div>
+
+                    <h3>DES</h3>
+
+                    <p>Data Encryption Standard</p>
+
+                    <span class="algo-tag">
+                        Legacy
+                    </span>
+
+                </div>
+
+                <div class="algorithm-card {% if algorithm=='RSA' %}active-card{% endif %}"
+                     data-algorithm="RSA">
+
+                    <div class="algo-icon">🛡️</div>
+
+                    <h3>RSA</h3>
+
+                    <p>Public Key Cryptography</p>
+
+                    <span class="algo-tag">
+                        Secure
+                    </span>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+        <!-- ==========================
+              CENTER PANEL
+        =========================== -->
+
+        <main class="workspace-card">
+
+            <div class="workspace-header">
+
+                <div>
+
+                    <h2>Encryption Workspace</h2>
+
+                    <p>
+                        Encrypt or decrypt securely using the selected algorithm.
+                    </p>
+
+                </div>
+
+                <div class="current-algo">
+
+                    <span>Current</span>
+
+                    <strong id="currentAlgorithm">
+
+                        {{ algorithm }}
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <form id="encryptForm" method="POST">
+
+                <input
+                    type="hidden"
+                    id="algorithm"
+                    name="algorithm"
+                    value="{{ algorithm }}">
+
+                <div class="input-group-custom">
+
+                    <label>Plain Text</label>
+
+                    <textarea
+                        name="plaintext"
+                        rows="6"
+                        placeholder="Type or paste your message..."
+                        required>{{ plaintext }}</textarea>
+
+                </div>
+
+                <div id="secretKeySection">
+
+                    <div class="input-group-custom">
+
+                        <label>Secret Key</label>
+
+                        <div class="key-wrapper">
+
+                            <input
+                                id="secretKeyInput"
+                                type="password"
+                                name="secret_key"
+                                value="{{ secret_key }}"
+                                placeholder="Enter Secret Key">
+
+                            <button
+                                type="button"
+                                class="eye-btn"
+                                id="toggleSecretKey">
+
+                                👁
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div id="rsaSection" style="display:none;">
+
+                    <div class="input-group-custom">
+
+                        <label>Public Key</label>
+
+                        <textarea
+                            name="public_key"
+                            rows="5">{{ public_key }}</textarea>
+
+                    </div>
+
+                    <div class="input-group-custom">
+
+                        <label>Private Key</label>
+
+                        <textarea
+                            name="private_key"
+                            rows="5">{{ private_key }}</textarea>
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="action-btn"
+                        name="action"
+                        value="generate_keys">
+
+                        🔑 Generate RSA Keys
+
+                    </button>
+
+                </div>
+
+                <div class="button-group">
+
+                    <button
+    id="encryptBtn"
+    class="action-btn encrypt-btn"
+    type="submit"
+    name="action"
+    value="encrypt">
+
+    <span class="btn-text">
+        <i class="bi bi-lock-fill"></i>
+        Encrypt
+    </span>
+
+</button>
+
+<button
+    id="decryptBtn"
+    class="action-btn decrypt-btn"
+    type="submit"
+    name="action"
+    value="decrypt">
+
+    <span class="btn-text">
+        <i class="bi bi-unlock-fill"></i>
+        Decrypt
+    </span>
+
+</button>
+
+                </div>
+                            </form>
+
+        </main>
+
+        <!-- ==========================
+               RIGHT PANEL
+        =========================== -->
+
+        <aside class="output-card">
+
+            <div class="output-header">
+
+                <div>
+
+                    <h2>Output</h2>
+
+                    <span
+                        id="statusBadge"
+                        class="status-badge">
+
+                        {{ status_type }}
+
+                    </span>
+
+                    <p
+                        id="statusMessage"
+                        class="status-message">
+
+                        {{ status_message }}
+
+                    </p>
+
+                </div>
+
+                <div class="output-actions">
+
+                    <button
+                        type="button"
+                        class="icon-btn"
+                        title="Copy"
+                        onclick="copyCipherText()">
+
+                        <i class="bi bi-clipboard"></i>
+
+                    </button>
+
+                    <button
+                        type="button"
+                        class="icon-btn"
+                        title="Download"
+                        onclick="downloadCipherText()">
+
+                        <i class="bi bi-download"></i>
+
+                    </button>
+
+                    <button
+                        type="button"
+                        class="icon-btn"
+                        title="Clear"
+                        onclick="clearFields()">
+
+                        <i class="bi bi-trash"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <textarea
+                id="cipherText"
+                rows="16"
+                readonly>{{ encrypted_text }}</textarea>
+
+        </aside>
+
+    </div>
+
+</div>
+
+{% if encrypted_text %}
+
+<script>
+
+window.onload = function(){
+
+    const output =
+    document.getElementById("cipherText");
+
+    if(output){
+
+        output.scrollIntoView({
+
+            behavior:"smooth",
+
+            block:"center"
+
+        });
+
+    }
+
+}
+
+</script>
+
+{% endif %}
+<!-- Toast Container -->
+<div class="toast-container position-fixed top-0 end-0 p-3">
+
+    <div id="liveToast"
+         class="toast align-items-center text-bg-dark border-0"
+         role="alert">
+
+        <div class="d-flex">
+
+            <div class="toast-body" id="toastMessage">
+
+                Success
+
+            </div>
+
+            <button type="button"
+                    class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast">
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+<footer class="footer">
+
+    <div class="footer-content">
+
+        <div>
+
+            <h3>🛡 CipherVault</h3>
+
+            <p>Professional Multi-Algorithm Encryption Platform</p>
+
+        </div>
+
+        <div class="footer-links">
+
+            <a href="https://github.com/Aditya2917" target="_blank">
+                <i class="bi bi-github"></i> GitHub
+            </a>
+
+            <span>Version 1.0</span>
+
+        </div>
+
+    </div>
+
+    <hr>
+
+    <p class="copyright">
+        © 2026 Aditya Pruseth • Built using Flask, Python, HTML, CSS & JavaScript
+    </p>
+
+</footer>
+{% endblock %}

@@ -56,6 +56,38 @@ Dashboard | CipherVault
     placeholder="Enter Secret Key"
     value="{{ secret_key }}"
 >
+<hr>
+
+<h3>RSA Keys</h3>
+
+<label>Public Key</label><br>
+
+<textarea
+    name="public_key"
+    rows="6"
+    cols="70"
+>{{ public_key }}</textarea>
+
+<br><br>
+
+<label>Private Key</label><br>
+
+<textarea
+    name="private_key"
+    rows="6"
+    cols="70"
+>{{ private_key }}</textarea>
+
+<br><br>
+
+<button
+    type="submit"
+    name="action"
+    value="generate_keys">
+    🔑 Generate RSA Keys
+</button>
+
+<hr>
 
         <br><br>
 

@@ -14,6 +14,14 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
 </head>
@@ -22,27 +30,80 @@
 
     <nav class="navbar">
 
-        <div class="logo">
-            🔐 CipherVault
-        </div>
+    <div class="logo">
+        <i class="bi bi-shield-lock-fill"></i>
+        CipherVault
+    </div>
 
-        <ul class="nav-links">
-            <li><a href="/">Dashboard</a></li>
-            <li><a href="#">Algorithms</a></li>
-            <li><a href="#">Documentation</a></li>
-            <li><a href="#">About</a></li>
-        </ul>
+    <div class="nav-right">
 
-    </nav>
+        <button id="themeToggle" class="theme-btn">
+
+            <i class="bi bi-moon-stars-fill"></i>
+
+        </button>
+
+        <a href="https://github.com/Aditya2917/CipherVault"
+           target="_blank"
+           class="github-btn">
+
+            <i class="bi bi-github"></i>
+
+            GitHub
+
+        </a>
+
+    </div>
+
+</nav>
 
     <main>
 
         {% block content %}
+        <section class="hero">
+
+    <div class="hero-content">
+
+        <h1>
+            Secure.
+            <span>Encrypt.</span>
+            Protect.
+        </h1>
+
+        <p>
+
+            Professional Multi-Algorithm Encryption Platform
+
+        </p>
+
+        <div class="hero-buttons">
+
+            <button class="primary-btn">
+
+                <i class="bi bi-lock-fill"></i>
+
+                Encrypt Now
+
+            </button>
+
+            <button class="secondary-btn">
+
+                <i class="bi bi-shield-check"></i>
+
+                Learn More
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
         {% endblock %}
 
     </main>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
